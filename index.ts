@@ -1,22 +1,31 @@
-import { Observable } from 'rxjs';
+import { Observable, fromEvent } from 'rxjs';
 
-const button1 = document.getElementById('btn1');
-const button2 = document.getElementById('btn2');
-const button3 = document.getElementById('btn3');
-const button4 = document.getElementById('btn4');
-const button5 = document.getElementById('btn5');
+const btnEmit = document.getElementById('emit');
+const btnError = document.getElementById('error');
+const btnComplete = document.getElementById('complete');
+const btnCancel = document.getElementById('cancel');
+const btnPrint = document.getElementById('print');
+
+btnPrint.onclick = () => console.log(subscription);
 
 const observable = new Observable(function (subs) {
   subs.next('first value');
-  button1.onclick = () => subs.next('Hello');
-  button2.onclick = () => subs.error('error');
-  button3.onclick = () => subs.complete();
-  button4.onclick = () => subs.unsubscribe();
-  button5.onclick = () => console.log(subs);
+  btnEmit.onclick = function () {
+    subs.next('hello hello');
+  };
+  btnError.onclick = function () {
+    subs.error("i'have a bad feeling about this");
+  };
+  btnComplete.onclick = function () {
+    subs.complete();
+  };
 });
-
-observable.subscribe({
+const subscription = observable.subscribe({
   next: (value) => console.log(value),
   error: (error) => console.log(error),
   complete: () => console.log('completed'),
 });
+
+btnCancel.onclick = function () {
+  subscription.unsubscribe();
+};
